@@ -16,6 +16,7 @@ emission_cv = pickle.load(emission_vect)
 app = FastAPI(debug=True)
 
 origins = [
+    "https://flask-api-vehicle-emission",
     "http://127.0.0.1:8000/"
     "http://localhost",
     "http://localhost:8080",
