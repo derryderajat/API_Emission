@@ -22,7 +22,7 @@ def findRealAttr(value, df=df):
 
 
 # init app
-app = FastAPI(debug=False)
+app = FastAPI(debug=True)
 
 origins = [
     "http://127.0.0.1:8000/"
@@ -61,7 +61,7 @@ async def get_data(value:str):
     y = findRealAttr(y)
     
     records = df[[x,y]].to_dict('records')
-    return {records}
+    return {'data':records}
 
 
 # ML Aspect
@@ -82,5 +82,3 @@ async def predict(value):
 
 if __name__ == '__main__':
     uvicorn.run(app, host='127.0.0.1', port=8000)
-    
-    
