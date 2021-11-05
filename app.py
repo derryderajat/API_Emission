@@ -22,7 +22,7 @@ def findRealAttr(value, df=df):
 
 
 # init app
-app = FastAPI(debug=True)
+app = FastAPI(debug=False)
 
 origins = [
     "http://127.0.0.1:8000/"
@@ -61,7 +61,7 @@ async def get_data(value:str):
     y = findRealAttr(y)
     
     records = df[[x,y]].to_dict('records')
-    return {"props":[x,y], "data":records}
+    return {records}
 
 
 # ML Aspect
