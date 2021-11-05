@@ -6,7 +6,7 @@ import numpy as np
 import pickle
 import pandas as pd
 
-df = pd.read_csv('./Datasets/CO2 Emissions_Canada.csv')
+df = pd.read_csv('./CO2 Emissions_Canada.csv')
 df = df.drop_duplicates()
 # Models
 emission_vect = open("Model/emission.pkl", "rb")
