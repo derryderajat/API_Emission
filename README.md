@@ -1,7 +1,9 @@
 # API_Emission using FASTAPI
 
 requirements:
+
 run `pip install -r requirements.txt` in your shell
+
 run `python app.py`
 
 
