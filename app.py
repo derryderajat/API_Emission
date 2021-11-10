@@ -39,7 +39,10 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
+def sliceLink(value):
+    value = value + '('
+    index = list(value).index('(')
+    return ''.join(list(value)[:index])
 # Routes
 @app.get('/')
 async def index():
@@ -50,7 +53,8 @@ async def get_items(name:str):
     return {"name":name }
 
 
-@app.get('/data/{value}')
+
+@app.get('/data/scatter/{value}')
 async def get_data(value:str):
     value = value.replace('%20', ' ')
     value = value.replace('%28', '(')
@@ -59,16 +63,21 @@ async def get_data(value:str):
     x,y = value.split('&')
     x = findRealAttr(x)
     y = findRealAttr(y)
-    
-    records = df[[x,y]].to_dict('records')
-    return {'data':records}
+    data = df[[x,y]].copy()
+    selected_columns = data.columns.tolist()
+    selected_data = df[selected_columns].copy().rename({selected_columns[0]: 'x', selected_columns[-1]: 'y'}, axis=1).sample(n=(len(data)))
+    json_data = selected_data.to_dict('records')
+    return {'props':selected_columns,'data':json_data}
 
+
+@app.get('/data/info/columns')
+async def get_data_info_column():
+    columns_name = list(df.select_dtypes(['float64', 'int64']).columns)
+    return {'columns': columns_name}
 
 # ML Aspect
 @app.get('/predict/{value}')
 async def predict(value):
-    # vect_value = emission_cv.transform([value]).toarray()
-    # prediction = emission_cv.predict(vect_value)
     if (',' in value):
         value = value.split(',')
     if ('_' in value):
@@ -79,6 +88,5 @@ async def predict(value):
     return {"orig_value":value, "prediction":prediction}
 
 
-
 if __name__ == '__main__':
-    uvicorn.run(app, host='127.0.0.1', port=8000)
+    uvicorn.run(app, host='127.0.0.1', port=8000)   
